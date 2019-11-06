@@ -1,7 +1,7 @@
 # INFO2-PremiersPasPDO
 
-### NOM : DOE
-### Prénom : John
+### NOM : AMSIF
+### Prénom : Alex
 ### Groupe de TP : 
 - [X] TD1
 - [ ] TD2

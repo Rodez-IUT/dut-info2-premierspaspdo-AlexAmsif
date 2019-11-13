@@ -1,37 +1,65 @@
-<!doctype html>
-<html lang="fr">
-	<head>
-		<meta charset="utf-8">
-		<title>Les excuses du lundi matin</title>
-	  
-		<link href="css/monStyle.css" rel="stylesheet">
-		
-		<!-- Bootstrap CSS -->
-		<link href="bootstrap/css/bootstrap.css" rel="stylesheet">
-		<link href="font-awesome/css/font-awesome.css" rel="stylesheet">
-	</head>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>All users</title>
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+        th, td {
+            padding: 8px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+    </style>
+</head>
 <body>
-<?php
-$host ='localhost';
-$db='my-activities';
-$user='root';
-$pass='root';
-$charset='utf8mb4';
 
-$dsn="mysql:host=$host;dbname=$$db;charset=$charset";
-$options = {
-	PDO::ATTR_ERRMODE			=> PDO::ERRMODE_EXCEPTION,
-	PDO::ATT_DEFAUT_FETCH_MODE  => PDO::FETCH_ASSOC,
-	PDO:ATTR_EMULATE_PREPARES   => false,
-};
-try{
-	$pdo = new PDO($dsn,$user,$pass,$options);
-}catch{
-	throw new PDOException($e->getMessage(),(int)$e->getCode());
+<?php
+$host = 'localhost';
+$port = '3306';
+$db = 'my-activities';
+$user = 'root';
+$pass = 'root';
+$charset = 'utf8mb4';
+$dsn = "mysql:host=$host;port=$port;dbname=$db;charset=$charset";
+$options = [
+    PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+    PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+    PDO::ATTR_EMULATE_PREPARES => false,
+];
+try {
+    $pdo = new PDO($dsn, $user, $pass, $options);
+} catch (PDOException $e) {
+    echo $e->getMessage() ;
+    throw new PDOException($e->getMessage(), (int)$e->getCode());
 }
-$stmt = $pdo->query('SELECT * FROM users ORDER BY username ASC');
-var_dump($stmt);
 ?>
+
+<h1>All Users</h1>
+
+<?php
+$stmt = $pdo->query('select users.id as user_id, username, email, s.name as status from users join status s on users.status_id = s.id');
+?>
+<table>
+    <tr>
+        <th>Id</th>
+        <th>Username</th>
+        <th>Email</th>
+        <th>Status</th>
+    </tr>
+    <?php while ($row = $stmt->fetch()) { ?>
+    <tr>
+        <td><?php echo $row['user_id']?></td>
+        <td><?php echo $row['username']?></td>
+        <td><?php echo $row['email']?></td>
+        <td><?php echo $row['status']?></td>
+    </tr>
+    <?php } ?>
+</table>
+
 
 </body>
 </html>

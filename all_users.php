@@ -19,12 +19,11 @@
 
 <?php
 $host = 'localhost';
-$port = '3306';
-$db = 'my-activities';
+$db = 'my_activities';
 $user = 'root';
 $pass = 'root';
 $charset = 'utf8mb4';
-$dsn = "mysql:host=$host;port=$port;dbname=$db;charset=$charset";
+$dsn = "mysql:host=$host;dbname=$db;charset=$charset";
 $options = [
     PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
     PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
@@ -41,7 +40,10 @@ try {
 <h1>All Users</h1>
 
 <?php
-$stmt = $pdo->query('select users.id as user_id, username, email, s.name as status from users join status s on users.status_id = s.id');
+$start_letter = 'e';
+$status_id = 2 ;
+$sql = "select users.id as user_id, username, email, s.name as status from users join status s on users.status_id = s.id where username like '$start_letter%' and status_id = $status_id order by username";
+$stmt = $pdo->query($sql);
 ?>
 <table>
     <tr>

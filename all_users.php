@@ -56,8 +56,12 @@ function get($name) {
 <?php
 $start_letter = htmlspecialchars(get("start_letter"));
 $status_id = (int)get("status_id");
-$sql = "select users.id as user_id, username, email, s.name as status from users join status s on users.status_id = s.id where username like '$start_letter%' and status_id = $status_id order by username";
-$stmt = $pdo->query($sql);
+
+$stmt = $pdo->prepare("select users.id as user_id, username, email, s.name as status 
+from users join status s on users.status_id = s.id where username
+like ? and
+status_id = ? order by username");
+$stmt -> execute([$start_letter.'%',$status_id]);
 ?>
 <table>
     <tr>
